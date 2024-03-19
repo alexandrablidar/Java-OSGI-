@@ -1,0 +1,123 @@
+//Blidar Alexandra, gr2121, lab6, pb1
+/*Scrieti un program Java care defineste un sir de valori de tip double care vor fi citite de la tastatura. Tratati exceptia 
+data de accesarea unui element cu index negativ sau mai mare decat indexul ultimului element din sir 
+(ArrayIndexOutOfBoundsException). Afisati un mesaj corespunzator in momentul detectarii exceptiei. Considerati o 
+matrice (cu numar de coloane fix pentru fiecare linie) si tratati exceptia posibil a aparea. Considerati si cazul in care 
+matricea are numar diferit de coloane la fiecare linie.*/
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Introduceți numărul de elemente din șir: ");
+        int numElements = scanner.nextInt();
+
+        double[] array = new double[numElements];
+
+        System.out.println("Introduceți elementele șirului:");
+
+        for (int i = 0; i < numElements; i++) {
+            System.out.print("Elementul " + (i + 1) + ": ");
+            array[i] = scanner.nextDouble();
+        }
+
+        System.out.print("Introduceți numărul de linii al matricei: ");
+        int numRows = scanner.nextInt();
+
+        double[][] matrix = new double[numRows][];
+
+        for (int i = 0; i < numRows; i++) {
+            System.out.print("Introduceți numărul de coloane pentru linia " + (i + 1) + ": ");
+            int numCols = scanner.nextInt();
+
+            matrix[i] = new double[numCols];
+
+            System.out.println("Introduceți elementele pentru linia " + (i + 1) + ":");
+
+            for (int j = 0; j < numCols; j++) {
+                System.out.print("Elementul " + (j + 1) + ": ");
+                matrix[i][j] = scanner.nextDouble();
+            }
+        }
+
+        System.out.println("Șirul introdus:");
+        printArray(array);
+
+        System.out.println("Matricea introdusă:");
+        printMatrix(matrix);
+    }
+
+    public static void printArray(double[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.println("Elementul " + (i + 1) + ": " + array[i]);
+        }
+    }
+
+    public static void printMatrix(double[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+
+
+
+
+
+
+//Blidar Alexandra, gr2121, lab6, pb2
+/*Scrieți o aplicație Java care, în cadrul metodei main( ), conține o secvență de cod care poate să lanseze excepții de tip 
+ArithmeticException, ArrayIndexOutOfBoundsException, NullPointerException, NumberFormatException și altele pe care 
+considerați că e util să le testați. Afișați în cadrul blocurilor catch mesajul generat de aceste excepții. În blocul finally, 
+afișați mesajul ”Am prins sau nu excepții”.*/
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            // ArithmeticException
+            int result = 10 / 0;
+        } catch (ArithmeticException e) {
+            System.out.println("ArithmeticException: " + e.getMessage());
+        }
+
+        try {
+            // ArrayIndexOutOfBoundsException
+            int[] array = new int[5];
+            int value = array[10];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("ArrayIndexOutOfBoundsException: " + e.getMessage());
+        }
+
+        try {
+            // NullPointerException
+            String text = null;
+            int length = text.length();
+        } catch (NullPointerException e) {
+            System.out.println("NullPointerException: " + e.getMessage());
+        }
+
+        try {
+            // NumberFormatException
+            String text = "abc";
+            int number = Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            System.out.println("NumberFormatException: " + e.getMessage());
+        }
+
+        try {
+            // Altă excepție generată
+            String str = "Hello";
+            char ch = str.charAt(10);
+        } catch (Exception e) {
+            System.out.println("Excepție: " + e.getMessage());
+        } finally {
+            System.out.println("Am prins sau nu excepții.");
+        }
+    }
+}

@@ -1,0 +1,205 @@
+//Blidar Alexandra, gr2121, sgr1, lab10, pb1
+/*Scrieți o aplicație de tip Frame în care afișați într-un Panel numele vostru și grupa din care faceți parte. Textul va fi de 
+culoare albastră și centrat atât pe orizontală, cât și pe verticală, ținând cont de dimensiunea panelului.*/
+
+import javax.swing.*;
+import java.awt.*;
+
+public class FrameApp extends JFrame {
+    public FrameApp() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(Color.WHITE);
+        getContentPane().add(mainPanel);
+
+        // Adaugam numele si grupa
+        JLabel label = new JLabel("Nume: John Doe | Grupa: 1234", SwingConstants.CENTER);
+        label.setForeground(Color.BLUE);
+        label.setVerticalAlignment(SwingConstants.CENTER);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        mainPanel.add(label);
+
+        // Setam dimensiunea panoului
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        int panelWidth = (int) (dim.getWidth() * 0.8);
+        int panelHeight = (int) (dim.getHeight() * 0.8);
+        mainPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+
+        // Setam proprietatile ferestrei principale
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("FrameApp");
+        setResizable(false);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new FrameApp();
+    }
+}
+
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab10, pb2
+/*Scrieți o aplicație de tip Frame care va desena într-un Canvas un cerc de culoare roșie tangent la dimensiunea cea mai 
+mică (înălțime, lățime) a componentei Canvas.*/
+
+import javax.swing.*;
+import java.awt.*;
+
+public class CanvasApp extends JFrame {
+    public CanvasApp() {
+        JPanel mainPanel = new JPanel();
+        getContentPane().add(mainPanel);
+
+        // Crearea obiectului Canvas si adaugarea la panoul principal
+        Canvas canvas = new Canvas();
+        mainPanel.add(canvas);
+
+        // Setam dimensiunea panoului principal astfel incat sa fie mai mica sau egala cu dimensiunea cea mai mica dintre inaltime si latime, a componentei Canvas
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        int canvasSize = (int) (Math.min(dim.getWidth(), dim.getHeight()) * 0.8);
+        mainPanel.setPreferredSize(new Dimension(canvasSize, canvasSize));
+
+        // Desenam cercul pe canvas
+        Graphics2D g2d = (Graphics2D) canvas.getGraphics();
+        g2d.setColor(Color.RED);
+        g2d.drawOval(0, 0, canvasSize, canvasSize);
+
+        // Setam proprietatile ferestrei principale
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("CanvasApp");
+        setResizable(false);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new CanvasApp();
+    }
+}
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab10, pb3
+/*Scrieți o aplicație de tip Frame ce afișează o imagine stocată local sub care este afișat și numele fișierului din care 
+provine, cu un font stabilit în prealabil și o culoare creată printr-o combinație de trei valori întregi (reprezentând 
+cantitățile de roșu, verde și albastru).*/
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+
+public class ImageApp extends JFrame {
+    public ImageApp() {
+        JPanel mainPanel = new JPanel();
+        getContentPane().add(mainPanel);
+
+        // Citim imaginea dintr-un fisier si o afisam pe un JLabel
+        ImageIcon imageIcon = new ImageIcon("image.jpg");
+        JLabel imageLabel = new JLabel(imageIcon);
+        mainPanel.add(imageLabel);
+
+        // Afisam numele fisierului din care provine imaginea sub imaginea afisata
+        String filename = new File("image.jpg").getName();
+        JLabel filenameLabel = new JLabel(filename);
+        filenameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        filenameLabel.setForeground(new Color(255, 0, 0));
+        mainPanel.add(filenameLabel);
+
+        // Setam proprietatile ferestrei principale
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("ImageApp");
+        setResizable(false);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new ImageApp();
+    }
+}
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab10, pb5
+/* Scrieți o aplicație Java de tip Frame care desenează un cerc colorat în toate culorile posibile. Se va începe cu culoarea 
+roșie, tranzițiile dintre culori trebuie să fie line, iar cercul este redesenat pe măsură ce culorile sunt generate.*/
+
+import javax.swing.*;
+import java.awt.*;
+
+public class ColorfulCircleApp extends JFrame implements Runnable {
+    private Thread thread;
+    private Color[] colors;
+    private int currentColor;
+
+    public ColorfulCircleApp() {
+        JPanel mainPanel = new JPanel();
+        getContentPane().add(mainPanel);
+
+        // Creem obiectul ColorfulCircle si il adaugam la panoul principal
+        ColorfulCircle colorfulCircle = new ColorfulCircle();
+        mainPanel.add(colorfulCircle);
+
+        // Initializam variabilele necesare pentru a genera culori
+        colors = new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.MAGENTA};
+        currentColor = 0;
+
+        // Setam proprietatile ferestrei principale
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("ColorfulCircleApp");
+        setResizable(false);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
+        // Pornim un fir de executie separat pentru a desena cercul
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            currentColor++;
+            if (currentColor >= colors.length) {
+                currentColor = 0;
+            }
+
+            // Redeseneaza cercul cu noua culoare
+            repaint();
+
+            try {
+                // Facem pauza de 500 de milisecunde pentru a face tranziția de culoare mai lină
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Clasa ColorfulCircle este utilizata pentru a desena cercul cu culorile generate
+    private class ColorfulCircle extends JPanel {
+        public ColorfulCircle() {
+            setPreferredSize(new Dimension(300, 300));
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(colors[currentColor]);
+            g.fillOval(0, 0, getWidth(), getHeight());
+        }
+    }
+
+    public static void main(String[] args) {
+        new ColorfulCircleApp();
+    }
+}

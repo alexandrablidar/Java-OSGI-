@@ -1,0 +1,628 @@
+//Blidar Alexandra, gr2121, sg1, lab 5, pb1
+/* Să se implementeze o interfață Java care conține prototipurile metodelor de adunare, scădere, înmulțire, împărțire, 
+radical și ridicare la putere. Toate metodele vor avea doi parametri de tip double și vor specifica tipul returnat double.
+Implementați interfața astfel încât operațiile să fie definite în cadrul unei clase. Instanțiați clasa și verificați operațiile 
+implementate. 
+*/
+
+import java.util.Scanner;
+import java.util.Random;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
+public class Main {
+    public static void main(String[] args) {
+    Scanner scan = new Scanner(System.in);
+    double a,b;
+    Operations obj=new Operations();
+    System.out.println("Introduceti 2 numere pentru a efectua operatii matematice cu acestea:");
+    a=scan.nextDouble();
+    b=scan.nextDouble();
+    Suma ad=(double x,double y)->(x+y);
+    Diferenta sc=(double x,double y)->(x-y);
+    Produs inm=(double x,double y)->(x*y);
+    Cat imp=(double x,double y)->(x/y);
+    Putere put=(double x,double y)-> {
+            double s=1;
+            for (int i = 0; i < y; i++) {
+                s*=x;
+            }
+            return s;
+        };
+    Radical sqr=(double x)->(sqrt(x));
+    System.out.println("Suma celor doua numere este: " + ad.suma(a,b));
+    System.out.println("Diferenta celor doua numere este: " + sc.dif(a,b));
+    System.out.println("Produsul celor doua numere este: " + inm.inmult(a,b));
+    if(b==0)
+        System.out.println("Nu se poate imparti la 0.");
+    else
+        System.out.println("Catul celor doua numere este: " + imp.impar(a,b));
+    System.out.println("Primul numar la puterea celui de-al doilea este: " + put.power(a,b));
+    System.out.println("Radical din primul numar este: " + sqr.rad(a));
+    System.out.println("Radical din al doilea numar este: " + sqr.rad(b));
+    }
+}
+
+interface Suma{
+    double suma(double a, double b);
+}
+interface Diferenta{
+    double dif(double a, double b);
+}
+interface Produs{
+    double inmult(double a, double b);
+}
+interface Cat{
+    double impar(double a, double b);
+}
+interface Putere{
+    double power(double a, double b);
+}
+interface Radical{
+    double rad(double a);
+}
+class Operations implements Suma,Diferenta,Produs,Cat,Putere,Rdical{
+
+
+    public double suma(double a, double b) {
+       return a+b;
+    }
+
+    public double dif(double a, double b) {
+        return a-b;
+    }
+
+    public double inmult(double a, double b) {
+        return a*b;
+    }
+
+    public double impar(double a, double b) {
+        return a/b;
+    }
+
+    public double power(double a, double b) {
+        double s=1;
+        for (int i = 0; i < b; i++) {
+             s*=a;
+        }
+        return s;
+    }
+
+    public double rad(double a) {
+    return sqrt(a);
+    }
+}
+
+
+
+//Blidar Alexandra, gr 2121, sg1, lab5, p2 
+/*Definiți o interfață denumită FormaGeometrica care are 2 metode care primesc ca parametru o valoare integer și 
+returnează o valoare double reprezentînd aria, respectiv perimetrul unei forme geometrice echilaterale. 
+Implementați interfața în 3 clase distincte pentru forme concrete de tip pătrat, triunghi echilateral și hexagon regulat. 
+Se preiau datele pentru un număr N de forme geometrice de fiecare tip. 
+Să se calculeze aria și perimetrul total al formelor geometrice, ținând cont că acestea nu se suprapun.*/
+
+import java.math.*;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+interface FormaGeometrica1 {
+	float aria();
+	float perimetru();
+}
+
+class Patrat implements FormaGeometrica1{
+	public float l;
+	
+	public float getL() {
+		return l;
+	}
+	public void setL(float l) {
+		this.l = l;
+	}
+	public float aria() {
+		return l*l;
+	}
+	public float perimetru() {
+		return 4*l;
+	}
+	
+}
+class Dreptunghi implements FormaGeometrica1{
+	public float l,L;
+
+	public float getl() {
+		return l;
+	}
+
+	public void setl(float l) {
+		this.l = l;
+	}
+
+	public float getL() {
+		return L;
+	}
+
+	public void setL(float l) {
+		L = l;
+	}
+	
+	public float aria() {
+		return l*L;
+	}
+	public float perimetru() {
+		
+		return 2*l+2*L;
+	}
+}
+
+class TriunghiIsoscel implements FormaGeometrica1{
+	public float l,b;
+
+	public float getL() {
+		return l;
+	}
+
+	public void setL(float l) {
+		this.l = l;
+	}
+
+	public float getB() {
+		return b;
+	}
+
+	public void setB(float b) {
+		this.b = b;
+	}
+	
+	public float aria() {
+		return (float) (b/2*Math.sqrt(l*l-b*b/4));
+	}
+	public float perimetru() {
+		return 2*l+b;
+	}
+}
+class TriunghiEchilateral implements FormaGeometrica1{
+	public float l;
+
+	public float getL() {
+		return l;
+	}
+
+	public void setL(float l) {
+		this.l = l;
+	}
+public float aria() {
+	return (float) (l*l*Math.sqrt(3)/4);
+}
+public float perimetru() {
+	return 3*l;
+}
+}
+
+class Cerc implements FormaGeometrica1{
+	public float raza;
+
+	public float getRaza() {
+		return raza;
+	}
+
+	public void setRaza(float raza) {
+		this.raza = raza;
+	}
+	public float aria() {
+		return (float) (Math.PI*raza*raza);
+	}
+	public float perimetru() {
+		return (float) (2*Math.PI*raza);
+	}
+}
+public class FormaGeometrica {
+	public static Patrat patrat = new Patrat();
+	public static Dreptunghi dreptunghi = new Dreptunghi();
+	public static TriunghiIsoscel triunghiIsoscel = new TriunghiIsoscel();
+	public static TriunghiEchilateral triunghiEchilateral = new TriunghiEchilateral();
+	public static Cerc cerc = new Cerc();
+	
+	public static Scanner inner = new Scanner(System.in);
+	public static void main(String[] args) {
+		System.out.print("Dati numarul de figuri geometrice: ");
+		int  n = inner.nextInt();
+		float ariaTotala=0, perimetruTotal=0;
+		System.out.print("\nPentru PATRAT introduceti cifra 1 si dimensiunea laturii\n Pentru DREPTUNGHI introduceti cifra 2, dimensiunea latimii si cea a lungimiii\n Pentru TRIUNGH ISOSCEL introduceti cifra 3, dimensiunea laturilor egale si dimensiunea bazei\n Pentru TRIUNGHI ECHILATERAL introduceti cifra 4 si dimensiunea laturii\n Pentru CERC introduceti cifra 5 si dimensiunea razei\nPentru a IESI apasati orice alta tasta.\n");
+
+		
+	for(int i = 0 ; i < n ; i ++) {
+		
+	System.out.print("\nFigura " + (i+1) + "\n");
+	inner = new Scanner(System.in);
+	String x = inner.nextLine();
+	StringTokenizer tk = new StringTokenizer(x," ");
+	
+	if(tk.hasMoreTokens()) {
+		
+		int y = Integer.valueOf(tk.nextToken());
+		
+		if(y == 1)
+			if(tk.hasMoreTokens()) {
+				patrat.setL(Float.valueOf(tk.nextToken()));
+				ariaTotala+=patrat.aria();
+				perimetruTotal+=patrat.perimetru();
+				
+				System.out.println("\nAria patratului: " + patrat.aria()+"     Perimetrul patratului: " + patrat.perimetru());
+			
+		}
+		
+		if(y == 2)
+				if(tk.hasMoreTokens()) {
+					
+					dreptunghi.setL(Float.valueOf(tk.nextToken()));
+					dreptunghi.setl(Float.valueOf(tk.nextToken()));
+					ariaTotala+=dreptunghi.aria();
+					perimetruTotal+=dreptunghi.perimetru();
+				
+					System.out.println("\nAria dreptunghiului: " + dreptunghi.aria()+"     Perimetrul dreptunghiului: " + dreptunghi.perimetru());
+				}
+	
+		
+		if(y == 3)
+				if(tk.hasMoreTokens()) {
+					
+					triunghiIsoscel.setL(Float.valueOf(tk.nextToken()));
+					triunghiIsoscel.setB(Float.valueOf(tk.nextToken()));
+					ariaTotala+=triunghiIsoscel.aria();
+					perimetruTotal+=triunghiIsoscel.perimetru();
+				
+				System.out.println("\nAria triunghiului isoscel: " + triunghiIsoscel.aria()+"     Perimetrul triunghiului isoscel: " + triunghiIsoscel.perimetru());
+				}
+	
+		if(y == 4)
+			if(tk.hasMoreTokens()) {
+			
+				triunghiEchilateral.setL(Float.valueOf(tk.nextToken()));
+				ariaTotala+=triunghiEchilateral.aria();
+				perimetruTotal+=triunghiEchilateral.perimetru();
+			
+				System.out.println("\nAria triunghiului echilateral: " + triunghiEchilateral.aria()+"     Perimetrul triunghiului echilateral: " + triunghiEchilateral.perimetru());
+		}
+		if(y == 5)
+			if(tk.hasMoreTokens()) {
+			
+				cerc.setRaza(Float.valueOf(tk.nextToken()));
+				ariaTotala+=cerc.aria();
+				perimetruTotal+=cerc.perimetru();
+			
+				System.out.println("\nAria cercului: " + cerc.aria()+"     Perimetrul cercului: " + cerc.perimetru());
+		}
+	}
+}
+
+System.out.println("\nAria totala este: " + ariaTotala + " \nPerimetrul total este: " + perimetruTotal);
+	}
+}
+
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab5, pb5
+/*Definiți un sir de elemente de tip String. Folosind expresii lambda, ordonați-l după următoarele metode: lungime (mic-
+>mare), inversul lungimii (mare->mic), ordine alfabetică, șirurile de caractere ce încep cu litera M vor fi primele, urmate 
+de restul șirurilor.*/
+
+import java.util.Scanner;
+
+interface OrdonareCrescator{
+	void ordonareCrescatoare(String[] A);
+}
+
+interface OrdonareDescrescator{
+	void ordonareDescrescatoare(String[] A);
+}
+
+interface OrdonareAlfabetica{
+	void ordonareAlfabetica(String[] A);
+}
+
+interface OrdonareM{
+	void ordonareM(String[] A);
+}
+
+public class Ordonare{
+	private static Scanner inner = new Scanner(System.in);
+	
+	public void ordonareM(String[] A,OrdonareM ordM) {
+		ordM.ordonareM(A);
+		
+	}
+	
+	public void ordonareAlfabetica(String[] A,OrdonareAlfabetica ordA) {
+		ordA.ordonareAlfabetica(A);
+		
+	}
+	
+	public void ordonareDescrescatoare(String[] A,OrdonareDescrescator ordD) {
+		ordD.ordonareDescrescatoare(A);
+		
+	}
+
+	public void ordonareCrescatoare(String[] A,OrdonareCrescator ordC) {
+		ordC.ordonareCrescatoare(A);
+		
+	}
+	public void afisare(String[] A) {
+		for(int i = 0 ; i< A.length; i ++)
+			System.out.println(A[i]);
+	}
+	public static void main(String[] args) {
+		Ordonare start =  new Ordonare();
+		
+		int n = 0 ;
+		
+		System.out.print("Introduceti numarul de string-uri: ");
+		n =inner.nextInt();
+		
+		String[] sir = new String[n];
+		 inner = new Scanner(System.in);
+		 
+		 for(int i = 0 ; i < n ; i ++)
+			 sir[i] = new String(inner.nextLine());
+		 
+		 OrdonareCrescator ordC = (A)->{
+			 for(int i = 0 ; i < A.length - 1; i++)
+				 for(int j =  i +  1; j < A.length; j ++)
+					 if(A[i].length() > A[j].length()) {
+						 String aux = new String(A[i]);
+						 A[i] = A[j];
+						 A[j] = aux;
+					 }
+		 };
+		 
+		 OrdonareDescrescator ordD = (A)->{
+			 for(int i = 0 ; i < A.length - 1; i++)
+				 for(int j =  i +  1; j < A.length; j ++)
+					 if(A[i].length() < A[j].length()) {
+						 String aux = new String(A[i]);
+						 A[i] = A[j];
+						 A[j] = aux;
+					 }
+		 };	 
+		 
+		 OrdonareAlfabetica ordA = (A) ->{
+			 for(int i = 0 ; i < A.length - 1; i++)
+				 for(int j =  i +  1; j < A.length; j ++)
+					 if(A[i].compareTo(A[j]) > 0) {
+						 String aux = new String(A[i]);
+						 A[i] = A[j];
+						 A[j] = aux;
+					 }
+		 };
+		 
+		 OrdonareM ordM= (A) ->{
+			 for(int i = 0 ; i < A.length - 1; i++)
+				 for(int j =  i +  1; j < A.length; j ++)
+					 if(A[i].startsWith("M")==false && A[j].startsWith("M") == true) {
+						 String aux = new String(A[i]);
+						 A[i] = A[j];
+						 A[j] = aux;
+					 }
+		 };
+		 
+		 System.out.println("\nString-urile afisate dupa ordonarea crescatoare\n");
+		 start.ordonareCrescatoare(sir, ordC);
+		 start.afisare(sir);
+		 
+		 
+		 System.out.println("\nString-urile afisate dupa ordonarea descrescatoare\n");
+		 start.ordonareDescrescatoare(sir, ordD);
+		 start.afisare(sir);
+		 
+		 System.out.println("\nString-urile afisate dupa ordonarea alfabetica\n");
+		 start.ordonareAlfabetica(sir, ordA);
+		 start.afisare(sir);
+		 
+		 
+		 System.out.println("\nString-urile afisate dupa ordonarea dupa litera M\n");
+		 start.ordonareM(sir, ordM);
+		 start.afisare(sir);
+		 
+		
+		 
+	}
+}
+
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab5, pb6
+/* Definiți o interfață PiesaDeSah, ce definește prototipul funcției muta(). Creați clasele aferente tipurilor distincte de 
+piese de sah și implementați metoda muta conform regulilor de mișcare a pieselor pe tabla de șah. Metoda are ca 
+parametri de intrare poziția curentă a piesei și direcția de deplasare dată prin coordonate geografice (N, S, E, V, NE, NV, 
+SE, SV) și returnează poziția finală. Atenție la piesele ce pot să se deplaseze mai mult de o căsută pe tabla de șah.*/
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        Nebun tura = new Nebun();
+        tura.muta(10,5,"NW");
+
+    }
+    interface PiesaDeSah{
+        public void muta (int x,int y, String a);
+    }
+    static class Pion implements PiesaDeSah{
+        public void muta(int y, int x, String a){
+            System.out.println("Pozitie initiala: ["+y+","+x+"]"+" cu directia "+a);
+            if(a.equals("N"))
+                x++;
+            else
+            {
+                System.out.println("Directie interzisa!");
+            }
+            System.out.println("Pozitie finala: ["+y+","+x+"]");
+        }
+    }
+    static   class Tura implements PiesaDeSah{
+        public void muta(int y, int x, String a){
+            int dist;
+            Scanner scan=new Scanner(System.in);
+            System.out.println("Cate spatii sa se mute tura?");
+            dist=scan.nextInt();
+            System.out.println("Pozitie initiala: ["+y+","+x+"]"+" cu directia "+a);
+            if(a.equals("N"))
+                x+=dist;
+            else if(a.equals("S"))
+                x-=dist;
+            else if (a.equals("W"))
+                y-=dist;
+            else if (a.equals("E"))
+                y+=dist;
+            else
+            {
+                System.out.println("Directie interzisa!");
+            }
+            System.out.println("Pozitie finala: ["+y+","+x+"]");
+        }
+    }
+    static  class Nebun implements PiesaDeSah{
+        public void muta(int y, int x, String a){
+            System.out.println("Pozitie initiala: ["+y+","+x+"]"+" cu directia "+a);
+            int dist;
+            Scanner scan=new Scanner(System.in);
+            System.out.println("Cate spatii sa se mute nebunul?");
+            dist=scan.nextInt();
+            if(a.equals("NW")) {
+                x+=dist;
+                y-=dist;
+            }
+            else if(a.equals("NE")){
+                x+=dist;
+                y+=dist;
+            }
+            else if (a.equals("SW")){
+                x-=dist;
+                y-=dist;}
+            else if (a.equals("SE")){
+                x-=dist;
+                y+=dist;}
+            else
+            {
+                System.out.println("Directie interzisa!");
+            }
+            System.out.println("Pozitie finala: ["+y+","+x+"]");
+        }
+    }
+    static class Regina implements PiesaDeSah{
+        public void muta(int y, int x, String a){
+            System.out.println("Pozitie initiala: ["+y+","+x+"]"+" cu directia "+a);
+            int dist;
+            Scanner scan=new Scanner(System.in);
+            System.out.println("Cate spatii sa se mute Regina?");
+            dist=scan.nextInt();
+            if(a.equals("N"))
+                x+=dist;
+            else if(a.equals("S"))
+                x-=dist;
+            else if (a.equals("W"))
+                y-=dist;
+            else if (a.equals("E"))
+                y+=dist;
+            else if(a.equals("NW")) {
+                x+=dist;
+                y-=dist;
+            }
+            else if(a.equals("NE")){
+                x+=dist;
+                y+=dist;
+            }
+            else if (a.equals("SW")){
+                x-=dist;
+                y-=dist;}
+            else if (a.equals("SE")){
+                x-=dist;
+                y+=dist;}
+            else
+            {
+                System.out.println("Directie interzisa!");
+            }
+            System.out.println("Pozitie finala: ["+y+","+x+"]");
+        }
+    }
+    static  class Rege implements PiesaDeSah{
+        public void muta(int y, int x, String a){
+            System.out.println("Pozitie initiala: ["+y+","+x+"]"+" cu directia "+a);
+            if(a.equals("N"))
+                x++;
+            else if(a.equals("S"))
+                x--;
+            else if (a.equals("W"))
+                y--;
+            else if (a.equals("E"))
+                y++;
+            else if(a.equals("NW")) {
+                x++;
+                y--;
+            }
+            else if(a.equals("NE")){
+                x++;
+                y++;
+            }
+            else if (a.equals("SW")){
+                x--;
+                y--;}
+            else if (a.equals("SE")){
+                x--;
+                y++;}
+            else
+            {
+                System.out.println("Directie interzisa!");
+            }
+            System.out.println("Pozitie finala: ["+y+","+x+"]");
+        }
+    }
+    static   class Cal implements PiesaDeSah{
+        public void muta(int y, int x, String a){
+            System.out.println("Pozitie initiala: ["+y+","+x+"]"+" cu directia "+a);
+            if(a.equals("NW")) {
+                x=x+2;
+                y--;
+            }
+            else if(a.equals("NE")){
+                x=x+2;
+                y++;
+            }
+            else if(a.equals("EN")){
+                x++;
+                y=y+2;
+            }
+            else if(a.equals("WN")){
+                x++;
+                y=y-2;
+            }
+            else if (a.equals("SW")){
+                x=x-2;
+                y--;}
+            else if (a.equals("SE")){
+                x=x-2;
+                y++;}
+            else if(a.equals("WS")){
+                x++;
+                y=y-2;
+            }
+            else if(a.equals("ES")){
+                x--;
+                y=y+2;
+            }
+            else
+            {
+                System.out.println("Directie interzisa!");
+            }
+            System.out.println("Pozitie finala: ["+y+","+x+"]");
+        }
+    }
+
+} 
+ 

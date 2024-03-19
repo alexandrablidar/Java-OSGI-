@@ -1,0 +1,249 @@
+//Blidar Alexandra, gr2121, sgr1, lab9, pb1
+/* Să se creeze o aplicație Java în cadrul căreia există o clasă ce implementează interfața Runnable. Constructorul clasei 
+permite definirea unui nume asociat fiecărui obiect instanțiat din clasa respectivă și de asemenea clasa are un atribut 
+static ce contorizează numărul de obiecte instanțiate. Metoda run( ) a clasei va afișa numele obiectului de un număr de 
+ori egal cu valoarea contorului și cu o întârziere de 1000 msec între afișări. 
+Dintr-o clasă separată, creați mai multe fire de execuție cu obiecte diferite din clasa descrisă anterior și analizați 
+rezultatele afișate.
+*/
+
+
+public class MyRunnable implements Runnable {
+    private String name;
+    private static int numObjects = 0;
+
+    public MyRunnable(String name) {
+        this.name = name;
+        numObjects++;
+    }
+
+    public void run() {
+        for (int i = 0; i < numObjects; i++) {
+            System.out.println(name);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Thread t1 = new Thread(new MyRunnable("Object1"));
+        Thread t2 = new Thread(new MyRunnable("Object2"));
+        Thread t3 = new Thread(new MyRunnable("Object3"));
+
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+
+
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab9, pb2
+/*Scrieti o aplicatie Java in care un fir de executie genereaza 30 numere aleatoare intre 0 si 30 si un alt fir de executie 
+afiseaza aria cercului cu raza generata de primul fir de executie, daca aceasta raza este divizibila cu 3.
+*/
+
+import java.util.Random;
+
+public class RandomGenerator implements Runnable {
+    private int[] numbers = new int[30];
+
+    public void run() {
+        Random rand = new Random();
+        for (int i = 0; i < 30; i++) {
+            numbers[i] = rand.nextInt(31);
+        }
+    }
+
+    public int[] getNumbers() {
+        return numbers;
+    }
+}
+
+public class CircleArea implements Runnable {
+    private int radius;
+
+    public CircleArea(int radius) {
+        this.radius = radius;
+    }
+
+    public void run() {
+        if (radius % 3 == 0) {
+            double area = Math.PI * radius * radius;
+            System.out.println("The area of the circle with radius " + radius + " is " + area);
+        } else {
+            System.out.println("The radius " + radius + " is not divisible by 3.");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        RandomGenerator generator = new RandomGenerator();
+        Thread t1 = new Thread(generator);
+        t1.start();
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        int[] numbers = generator.getNumbers();
+        for (int i = 0; i < 30; i++) {
+            Thread t2 = new Thread(new CircleArea(numbers[i]));
+            t2.start();
+        }
+    }
+}
+
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab9, pb3
+/*Scrieti o clasa pentru determinarea unui element din sirul lui Fibonacci. In clasa vor fi 2 metode, una care calculeaza 
+valoarea elementului si alta care afiseaza acea valoare. Folositi mecanismul de multithreading cu sincronizare, astfel 
+incat in timp ce un fir de executie realizeaza calculul, celalalt sa afiseze valorile intermediare (toate componentele sirului 
+pana la elementul calculat).*/
+
+public class Fibonacci {
+    private int n;
+    private long result;
+
+    public synchronized void calculate(int n) {
+        this.n = n;
+        if (n == 0) {
+            result = 0;
+        } else if (n == 1) {
+            result = 1;
+        } else {
+            long fib1 = 0;
+            long fib2 = 1;
+            for (int i = 2; i <= n; i++) {
+                long fib = fib1 + fib2;
+                fib1 = fib2;
+                fib2 = fib;
+                result = fib;
+                notify();
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        notify();
+    }
+
+    public synchronized void print() {
+        if (n == 0) {
+            System.out.println("The Fibonacci sequence is: 0");
+        } else if (n == 1) {
+            System.out.println("The Fibonacci sequence is: 0 1");
+        } else {
+            long fib1 = 0;
+            long fib2 = 1;
+            System.out.print("The Fibonacci sequence is: 0 1 ");
+            for (int i = 2; i <= n; i++) {
+                long fib = fib1 + fib2;
+                fib1 = fib2;
+                fib2 = fib;
+                System.out.print(fib + " ");
+                notify();
+                try {
+                    if (i < n) {
+                        wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        System.out.println("\nThe " + n + "th Fibonacci number is: " + result);
+    }
+}
+
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab9, pb4
+/*Creați o aplicație Java ce folosește accesul sincronizat la metode pentru excludere mutuală. Creați 3 fire de execuție 
+ce apelează simultan metode de incrementare și decrementare a unei variabile dintr-o altă clasă. Verificați dacă 
+rezultatele sunt cele așteptate. Eliminați blocurile sincronizate și re-evaluați rezultatele.*/
+
+public class Counter {
+    private int count;
+
+    public Counter(int count) {
+        this.count = count;
+    }
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized void decrement() {
+        count--;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+public class CounterThread extends Thread {
+    private Counter counter;
+    private String action;
+
+    public CounterThread(Counter counter, String action) {
+        this.counter = counter;
+        this.action = action;
+    }
+
+    @Override
+    public void run() {
+        if (action.equals("increment")) {
+            for (int i = 0; i < 100000; i++) {
+                counter.increment();
+            }
+        } else if (action.equals("decrement")) {
+            for (int i = 0; i < 100000; i++) {
+                counter.decrement();
+            }
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter(0);
+
+        CounterThread thread1 = new CounterThread(counter, "increment");
+        CounterThread thread2 = new CounterThread(counter, "decrement");
+        CounterThread thread3 = new CounterThread(counter, "increment");
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
+
+        thread1.join();
+        thread2.join();
+        thread3.join();
+
+        System.out.println("Counter value: " + counter.getCount());
+    }
+}
+public void increment() {
+    count++;
+}
+
+public void decrement() {
+    count--;
+}

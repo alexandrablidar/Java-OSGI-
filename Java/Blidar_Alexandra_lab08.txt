@@ -1,0 +1,223 @@
+//Blidar Alexandra, gr2121, sgr1, lab8, pb1
+/*Folosind mecanismul preluării datelor de la tastatură cu un BufferedReader și InputStreamReader, preluați: un mesaj 
+de tip String, ziua ca intreg, luna de tip String si anul ca un întreg. Procesul se va încheia în momentul trecerii la o nouă 
+linie, când se va afișa fiecare câmp pe o linie separată. Afisati de asemenea toate campurile in ordinea in care au aparut. 
+Recomandare: Folosiți clasa StreamTokenizer, atributele sval, nval respectiv constanta TT_EOL.
+Considerați și cazul în care nu cunoașteți natura câmpurilor introduse (numeric, cuvânt) folosind constantele 
+TT_NUMBER, TT_WORD.
+*/
+
+import java .io.*;
+import java.util.StringTokenizer;
+
+public class citireData {
+
+	
+	public static void main(String...args) {
+		String luna = new String();
+		int zi = -1, an = -1;
+		
+		try{ 
+			System.out.println ("In ce data suntem? (zi, luna , an)");
+			
+			BufferedReader inData = new BufferedReader(new InputStreamReader(System.in));
+			StreamTokenizer inStream = new StreamTokenizer(inData);
+		    String str = new String();
+		    str = inData.readLine();
+		   
+		    StringTokenizer tk = new StringTokenizer(str," ");
+		    
+		    zi = Integer.valueOf(tk.nextToken());
+		    luna = tk.nextToken();
+		    an = Integer.valueOf(tk.nextToken());
+	
+		    System.out.println("\nZi: " + zi + "\nLuna: " + luna +"\nAn: " + an);
+		    
+		} 
+		catch(IOException e){
+				System.out .println("Eroare citire" +e);
+				} 
+		
+		zi = -1;
+		an = -1;
+		boolean eol = false;
+		try {
+			BufferedReader inData = new BufferedReader(new InputStreamReader(System.in));
+			StreamTokenizer tf = new StreamTokenizer(inData);
+			tf.eolIsSignificant(true);
+		    int i, nr = 3;
+
+		    while(!eol) {
+			 System.out.print("\nNext token: ");
+			  i = tf.nextToken();
+			  switch (i) {
+		      case StreamTokenizer.TT_EOL:
+		    	  nr--;
+		    	  if(nr == 0) {
+		        System.out.println("\nSfarsit de linie.");
+		        eol = true;
+		       inData.close();
+		    	  }
+		        break;
+		      case StreamTokenizer.TT_NUMBER:
+		    	  if(zi == -1)
+		    	  zi = (int) tf.nval;
+		    	  else 
+		    		  an= (int) tf.nval;
+		        break;
+		      case StreamTokenizer.TT_WORD:
+		    	  luna = tf.sval;
+		        break;
+		   
+		      }
+		    }
+		    System.out.println("\nZi: " + zi + "\nLuna: " + luna +"\nAn: " + an);
+			}catch(IOException e){
+				System.out .println("Eroare citire  " +e);
+				} 
+		}
+	
+	
+}
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab8, pb2
+/* Implementați aplicația anterioară folosind un fișier de intrare care conține un anumit număr de inregistrări cu 
+formatul specificat mai sus.
+*/
+
+import java .io.*;
+import java.util.StringTokenizer;
+
+public class Same {
+	
+	
+		public static void main(String...args) {
+			String luna = new String();
+			int zi = -1, an = -1;
+			
+			try{ 
+				
+				BufferedReader inData = new BufferedReader(new FileReader("B:\\Facultate\\An 2\\Semestrul 2\\Programare\\Laborator 8\\data.txt"));
+				StreamTokenizer inStream = new StreamTokenizer(inData);
+			    String str = new String();
+			    str = inData.readLine();
+			    StringTokenizer tk = new StringTokenizer(str," ");
+			    inData.close();
+			    zi = Integer.valueOf(tk.nextToken());
+			    luna = tk.nextToken();
+			    an = Integer.valueOf(tk.nextToken());
+			    
+			    System.out.println("\nZi: " + zi + "\nLuna: " + luna +"\nAn: " + an);
+			    
+			} 
+			catch(IOException e){
+					System.out .println("Eroare citire" +e);
+					} 
+			
+			zi = -1;
+			an = -1;
+			boolean eol = false;
+			try {
+				BufferedReader inData = new BufferedReader(new FileReader("B:\\Facultate\\An 2\\Semestrul 2\\Programare\\Laborator 8\\data.txt"));
+				StreamTokenizer tf = new StreamTokenizer(inData);
+				tf.eolIsSignificant(true);
+			    int i, nr = 3;
+
+			    while(!eol) {
+				  i = tf.nextToken();
+				  switch (i) {
+				  case StreamTokenizer.TT_EOF:
+					  eol = true;
+					    System.out.println("\nSfarsit de fisier.");
+					  break;
+			      case StreamTokenizer.TT_EOL:
+			    	  nr--;
+			    	  if(nr == 0) {
+			        System.out.println("\nSfarsit de linie.");
+			        eol = true;
+			       inData.close();
+			    	  }
+			        break;
+			      case StreamTokenizer.TT_NUMBER:
+			    	  if(zi == -1)
+			    	  zi = (int) tf.nval;
+			    	  else 
+			    		  an= (int) tf.nval;
+			        break;
+			      case StreamTokenizer.TT_WORD:
+			    	  luna = tf.sval;
+			        break;
+			   
+			      }
+			    }
+			    System.out.println("\nZi: " + zi + "\nLuna: " + luna +"\nAn: " + an);
+				}catch(IOException e){
+					System.out .println("Eroare citire  " +e);
+					} 
+			}
+		
+		
+	}
+
+
+
+
+
+
+//Blidar Alexandra, gr2121, sgr1, lab8, pb4
+/*Se dă un fișier binar ce conține o secvență de caractere ce reprezintă o cheie privată pentru Bitcoin (256 caractere). 
+De la tastatură se citește o secvență de caractere ce reprezintă cheia publică a unui Bitcoin. Să se genereze 
+identificatorul de tranzacție corespunzător acestor informații folosind operația de sau exclusiv (XOR) pe biți aplicată 
+între cheile publică și privată. Scrieți informația rezultată într-un fișier binar.
+*/
+
+import java.io .* ;
+import java.nio.file.Files;
+import java.util.Scanner;
+
+public class Bitcoin {
+
+	public static void main(String[] args) {
+		  try{   
+			    String fileName = "cod.txt";
+			    File file = new File(fileName);
+
+			    byte [] fileBytes = Files.readAllBytes(file.toPath());
+			    
+			    /*String fileCode = new String();
+			    for(byte b : fileBytes) {
+			      char singleChar = (char) b;
+			      fileCode+=singleChar;
+			    }*/
+			    
+			    System.out.print("\nIntroduceti cheia publica (dimensiune " + fileBytes.length +"): ");
+			    Scanner inner = new Scanner(System.in);
+			    String consoleCode = new String();
+			    consoleCode = inner.nextLine();
+			    
+			    if(consoleCode.length() != fileBytes.length)
+			    	System.out.print("\nDimensiunea codului este gresita.");
+			    else {
+			    	
+			    byte [] consoleBytes = consoleCode.getBytes();
+			    byte [] identificator = new byte[fileBytes.length];
+			    for(int i = 0 ; i < fileBytes.length;i ++)
+			    	identificator[i] = (byte) (consoleBytes[i]^fileBytes[i]);
+			    
+			    File outputFile = new File("out.txt");
+			    FileOutputStream fos = new FileOutputStream(outputFile);
+			    fos.write(identificator); 
+			    fos.close();
+			 
+			    }
+			    
+		   }  
+	catch(IOException e){    
+		System.out .println("Eroare: "+e.toString    ());  
+		}   
+	
+	}
+}

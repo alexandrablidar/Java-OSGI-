@@ -1,0 +1,75 @@
+/*Blidar Alexandra, g2121, sg1, pb2*/
+
+import java.util.Scanner;
+
+public class Factorial {
+
+	private static Scanner dis;
+	public static void main(String[] args)
+	{
+		long nr;
+		int fa;
+		int i;
+
+		System.out.print("Introduceti un nr: ");
+		System.out.flush();
+		dis = new Scanner(System.in);
+		nr = dis.nextLong();
+
+		for(i = 1 ; i <= nr ; i ++)
+		{
+			fa=fa*i;
+		}
+
+		System.out.println("Factorialul nr" +nr+ "este" +fa);
+
+	}
+}
+
+
+
+/* Blidar Alexandra, grupa 2121, sg 1,l2, p3 */
+
+package pb3;
+
+public class CMMDC {
+
+	public static void main(String[] args)
+	{
+		int nr1 = Integer.parseInt(args[0]);
+		int nr2 = Intereg.parseInt(args[1]);
+
+		System.out.print("Numerele sunt:" +nr1+ "" +nr2+ "");
+		System.out.flush();
+
+		while(nr1!=nr2)
+			if(nr1>nr2)
+				nr1-=nr2;
+			else
+				nr2-=nr1;
+
+		System.out.println("CMMDC al nr este:" +nr1);
+
+	}
+
+}
+
+
+
+/*Blidar Alexandra, gr2121, sg1, pb4*/
+
+public class divizori{
+
+	public static void main(String[] args);
+	{
+		int n = Integer.parseInt(args[0]);
+		int d;
+
+		System.out.print("Numarul introdus este: " + n +"\n");
+		System.out.flush();
+		System.out.println("Divizorii numarului sunt:");
+		for(d = 1 ; d <= n ; d++)
+			if(n % d == 0)
+				System.out.println(" " + d);
+	}
+}

@@ -1,0 +1,314 @@
+//Blidar Alexandra, gr 2121, sgr1, lab11, pb 1
+/*Implementați o aplicație Java care folosește GridLayout pentru aranjarea în pagină a componentelor unei aplicații de 
+calcul (TextField pt. intrare/ieșire, butoane pentru numere, operații matematice, ștergerea ecranului, etc.).
+*/
+package pb1;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CalculatorApp extends JFrame implements ActionListener {
+    private JTextField textField;
+
+    public CalculatorApp() {
+        // Setează proprietățile ferestrei
+        setTitle("Calculator");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 400);
+        setLayout(new BorderLayout());
+
+        // Creează componentele
+        textField = new JTextField();
+        textField.setEditable(false);
+        add(textField, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(4, 4));
+
+        String[] buttonLabels = {
+                "7", "8", "9", "/",
+                "4", "5", "6", "*",
+                "1", "2", "3", "-",
+                "0", ".", "=", "+"
+        };
+
+        // Adaugă butoanele în panel
+        for (String label : buttonLabels) {
+            JButton button = new JButton(label);
+            button.addActionListener(this);
+            buttonPanel.add(button);
+        }
+
+        add(buttonPanel, BorderLayout.CENTER);
+
+        // Afiseaza fereastra
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        switch (command) {
+            case "=":
+                // Evaluare expresie și afișare rezultat în câmpul text
+                String expression = textField.getText();
+                try {
+                    double result = evaluateExpression(expression);
+                    textField.setText(Double.toString(result));
+                } catch (Exception ex) {
+                    textField.setText("Eroare");
+                }
+                break;
+            case "C":
+                // Șterge conținutul câmpului text
+                textField.setText("");
+                break;
+            default:
+                // Adaugă comanda la câmpul text
+                textField.setText(textField.getText() + command);
+                break;
+        }
+    }
+
+    private double evaluateExpression(String expression) {
+        // Evaluare expresie matematică și returnare rezultat
+        // Acesta este doar un exemplu simplu, nu gestionează expresii complexe
+        return Double.parseDouble(expression);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new CalculatorApp();
+            }
+        });
+    }
+}
+
+
+
+
+
+////Blidar Alexandra, gr 2121, sgr1, lab11, pb2
+/*Implementați o aplicație Java care folosește GridBagLayout pentru aranjarea în pagină a componentelor unei aplicații 
+de calcul (TextField pt. intrare/ieșire, butoane pentru numere, operații matematice, ștergerea ecranului, etc.).*/
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CalculatorApp extends JFrame implements ActionListener {
+    private JTextField textField;
+
+    public CalculatorApp() {
+        // Setează proprietățile ferestrei
+        setTitle("Calculator");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 400);
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 4;
+
+        // Creează câmpul text
+        textField = new JTextField();
+        textField.setEditable(false);
+        add(textField, constraints);
+
+        // Definirea etichetelor și pozițiilor butoanelor
+        String[] buttonLabels = {
+                "7", "8", "9", "/",
+                "4", "5", "6", "*",
+                "1", "2", "3", "-",
+                "0", ".", "=", "+",
+                "C"
+        };
+
+        constraints.gridwidth = 1;
+        constraints.gridy = 1;
+
+        // Adaugă butoanele în panel
+        for (String label : buttonLabels) {
+            constraints.gridx = (constraints.gridx + 1) % 4;
+            if (constraints.gridx == 0) {
+                constraints.gridy++;
+            }
+
+            JButton button = new JButton(label);
+            button.addActionListener(this);
+            add(button, constraints);
+        }
+
+        // Afiseaza fereastra
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        switch (command) {
+            case "=":
+                // Evaluare expresie și afișare rezultat în câmpul text
+                String expression = textField.getText();
+                try {
+                    double result = evaluateExpression(expression);
+                    textField.setText(Double.toString(result));
+                } catch (Exception ex) {
+                    textField.setText("Eroare");
+                }
+                break;
+            case "C":
+                // Șterge conținutul câmpului text
+                textField.setText("");
+                break;
+            default:
+                // Adaugă comanda la câmpul text
+                textField.setText(textField.getText() + command);
+                break;
+        }
+    }
+
+    private double evaluateExpression(String expression) {
+        // Evaluare expresie matematică și returnare rezultat
+        // Acesta este doar un exemplu simplu, nu gestionează expresii complexe
+        return Double.parseDouble(expression);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new CalculatorApp();
+            }
+        });
+    }
+}
+
+
+
+
+
+
+////Blidar Alexandra, gr 2121, sgr1, lab11, pb3
+/* Implementați o aplicație de tip TabbedView care afișează în fiecare panou grafic:
+- o zonă de desenare
+- componente pentru selectarea tipului de font, a mărimii de font și a culorii textului
+- componente pentru alegerea unei forme geometrice (dintr-un set predefinit) și a mărimii laturii / razei (după caz)*/
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class TabbedViewApp extends JFrame {
+    public TabbedViewApp() {
+        // Setează proprietățile ferestrei
+        setTitle("Tabbed View");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(500, 400);
+
+        // Creează un container pentru filele de taburi
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        // Creează și adaugă primul panou
+        JPanel panel1 = createPanel("Panou 1");
+        tabbedPane.addTab("Panou 1", panel1);
+
+        // Creează și adaugă al doilea panou
+        JPanel panel2 = createPanel("Panou 2");
+        tabbedPane.addTab("Panou 2", panel2);
+
+        // Adaugă containerul de file de taburi la fereastră
+        add(tabbedPane);
+
+        // Afisează fereastra
+        setVisible(true);
+    }
+
+    private JPanel createPanel(String panelName) {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        // Creează zona de desenare
+        DrawingArea drawingArea = new DrawingArea();
+        panel.add(drawingArea, BorderLayout.CENTER);
+
+        // Creează panelul pentru componente
+        JPanel controlPanel = new JPanel(new FlowLayout());
+
+        // Creează componente pentru selectarea fontului
+        JLabel fontLabel = new JLabel("Font:");
+        JComboBox<String> fontComboBox = new JComboBox<>(new String[]{"Arial", "Times New Roman", "Verdana"});
+        controlPanel.add(fontLabel);
+        controlPanel.add(fontComboBox);
+
+        // Creează componente pentru selectarea mărimii fontului
+        JLabel sizeLabel = new JLabel("Size:");
+        JTextField sizeTextField = new JTextField(5);
+        controlPanel.add(sizeLabel);
+        controlPanel.add(sizeTextField);
+
+        // Creează componente pentru selectarea culorii textului
+        JLabel colorLabel = new JLabel("Color:");
+        JButton colorButton = new JButton("Select Color");
+        controlPanel.add(colorLabel);
+        controlPanel.add(colorButton);
+
+        // Creează componente pentru alegerea formei geometrice și mărimii laturii/razei
+        JLabel shapeLabel = new JLabel("Shape:");
+        JComboBox<String> shapeComboBox = new JComboBox<>(new String[]{"Rectangle", "Circle"});
+        JLabel sizeParamLabel = new JLabel("Size:");
+        JTextField sizeParamTextField = new JTextField(5);
+        controlPanel.add(shapeLabel);
+        controlPanel.add(shapeComboBox);
+        controlPanel.add(sizeParamLabel);
+        controlPanel.add(sizeParamTextField);
+
+        // Adaugă panoul de control în panoul principal
+        panel.add(controlPanel, BorderLayout.SOUTH);
+
+        // Asociere acțiuni pentru butonul de culoare
+        colorButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Color color = JColorChooser.showDialog(panel, "Select Color", Color.BLACK);
+                if (color != null) {
+                    drawingArea.setTextColor(color);
+                }
+            }
+        });
+
+        return panel;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new TabbedViewApp();
+            }
+        });
+    }
+}
+
+class DrawingArea extends JPanel {
+    private Color textColor;
+
+    public DrawingArea() {
+        textColor = Color.BLACK;
+    }
+
+    public void setTextColor(Color color) {
+        textColor = color;
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(textColor);
+        g.setFont(new Font("Arial", Font.PLAIN, 16));
+        g.drawString("Exemplu de text", 50, 50);
+    }
+}

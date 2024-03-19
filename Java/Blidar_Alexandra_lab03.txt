@@ -1,0 +1,172 @@
+//Blidar Alexandra, gr 2121, sg1, pb1, Lab3
+
+import java.util.Scanner;
+
+public class Switch_01 {
+	static Scanner in=new Scanner(System.in);
+	public static void main(String[] args) {
+		int luna1;
+		System.out.println("Introdu numarul lunii dorite : ");
+		luna1=in.nextInt();
+		String luna2;
+		switch (luna1) {
+			case 1: luna2 = "Ianuarie"; break;
+			case 2: luna2= "Februarie"; break;
+			case 3: luna2 = "Martie"; break;
+			case 4: luna2 = "Aprilie"; break;
+			case 5: luna2 = "Mai"; break;
+			case 6: luna2 = "Iunie"; break;
+			case 7: luna2 = "Iulie"; break;
+			case 8: luna2 = "August"; break;
+			case 9: luna2 = "Septembrie"; break;
+			case 10: luna2 = "Octombrie"; break;
+			case 11: luna2 = "Noiembrie"; break;
+			case 12: luna2 = "Decembrie"; break;
+			default: luna2 = "numar incorect"; break;
+		}
+		System.out.println(luna2);
+		
+		System.out.println("Introdu luna dorita : ");
+		Scanner scanner = new Scanner(System.in);
+		String luna = in.nextLine();
+		switch (luna) { 
+			case "Ianuarie": 	luna1 = 1; break; 
+			case "Februarie": 	luna1 = 2; break; 
+			case "Martie":  	luna1 = 3; break; 
+			case "Aprilie": 	luna1 = 4; break; 
+			case "Mai": 		luna1 = 5; break; 
+			case "Iunie": 		luna1 = 6; break; 
+			case "Iulie": 		luna1 = 7; break; 
+			case "August": 		luna1 = 8; break;
+			case "Septembrie": 	luna1 = 9; break;
+			case "Octombrie": 	luna1 = 10; break;
+			case "Noiembrie": 	luna1 = 11; break;
+			case "Decembrie": 	luna1 = 12; break;
+			default: 		luna1 = 0; 
+		} 
+		if(luna1!=0)
+			System.out.println("Luna "+luna1);
+		else
+			System.out.println("Luna gresita");
+	}
+
+}
+
+
+
+//Blidar Alexandra, gr 2121, sg1, pb4, lab3
+
+import java.util.Scanner;
+public class Valori {
+	static Scanner in=new Scanner(System.in);
+ public static void main(String args[]) {
+ int nr= 125;
+ System.out.println(" Valoarea intreaga: nr= "+nr+"(valoare predefinita)");
+ System.out.println("Valoarea nr in binar:"+Integer.toBinaryString(nr));
+ System.out.println("valoarea nr in octal:"+Integer.toOctalString(nr));
+ System.out.println("Valoarea nr in hexa:"+Integer.toHexString(nr)); 
+ Afisare();
+ }
+ public static void Afisare() {
+	 int n=0;
+	 System.out.println("Introduceti o valoare intreaga:");
+	 n=in.nextInt();
+	 System.out.println(" Valoarea intreaga: n= "+n);
+	 System.out.println("Valoarea introdusa in binar:"+Integer.toBinaryString(n));
+	 System.out.println("valoarea introdusa in octal:"+Integer.toOctalString(n));
+	 System.out.println("Valoarea introdusa in hexa:"+Integer.toHexString(n)); 
+}
+}
+
+
+
+//Blidar Alexandra, gr2121, sg1, pb5, lab3
+
+public class Sortari {
+  static int[] BubbleSort(int t[]) {
+	 int n=t.length;
+	 for(int i=0;i<n-1;i++) {
+		for(int j=0;j<n-i-1;j++) {
+			if(t[j]>t[j+1]) {
+				int aux=t[j+1];
+				t[j+1]=t[j];
+				t[j]=aux;
+			}
+		}
+	 }
+	 return t;
+ }
+  static int[] InsertionSort(int t[]) {
+	int n=t.length;
+	for(int i=1;i<n;++i) {
+		int j=i-1;
+		int aux=t[i];
+		while(aux<t[j]&&j>=0){
+			t[j+1]=t[j];
+			j=j-1;
+		}
+		t[j+1]=aux;
+	}
+	  return t;
+  }
+  static int[] QuickSort(int[] t, int low, int high) {
+	  //erori posibile
+		if (t == null || t.length == 0) {
+			System.out.println("Tabloul dat este gol!");
+			return t;
+		}
+		if (low >= high)
+			return t;
+
+		// Alegem pivotul(aici alegem pe cel din mijloc)
+		int middle = low + (high - low) / 2;
+		int pivot = t[middle];
+
+		int i = low, j = high;
+		while (i <= j) {
+			while (t[i] < pivot) {
+				i++;
+			}
+
+			while (t[j] > pivot) {
+				j--;
+			}
+
+			if (i <= j) {
+				int aux = t[i];
+				t[i] = t[j];
+				t[j] = aux;
+				i++;
+				j--;
+			}
+		}
+
+		//Reapelam recursiv
+		if (low < j)
+			QuickSort(t, low, j);
+
+		if (high > i)
+			QuickSort(t, i, high);
+  return t;
+}
+  
+ static void Afisare_tablou(int t[]) 
+ { 
+     int n = t.length; 
+     for (int i=0; i<n; ++i) 
+         System.out.print(t[i] + " "); 
+     System.out.println(); 
+ } 
+	
+	public static void main(String[] args) {
+		   // Main ob = new Main(); 
+	        int tab[] = {64, 34, 25, 12, 22, 11, 90}; 
+	        System.out.println("Sortare prin bubblesort:"); 
+	        Afisare_tablou( BubbleSort(tab) ); 
+	        System.out.println("Sortare prin insertionsort:"); 
+	        Afisare_tablou( InsertionSort(tab) ); 
+	        System.out.println("Sortare prin quicksort:"); 
+	        Afisare_tablou( QuickSort(tab,0,tab.length-1) ); 
+	}
+
+}
